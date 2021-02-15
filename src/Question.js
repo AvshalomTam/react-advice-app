@@ -24,11 +24,33 @@ const useStyles = makeStyles(
 export default function Question() {
 
     const [started, setStarted] = useState(false)
-    const [advice, setAdvice] = useState('stam')
+    const [advice, setAdvice] = useState('')
     const classes = useStyles()
 
+    useEffect(() => {
+        getAdvice()
+    }, [])
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     function getAdvice() {
-        axios.get('')
+        const adviceNumber = getRandomInt(1, 217).toString()
+        console.log(adviceNumber)
+        const url = `https://api.adviceslip.com/advice/${adviceNumber}`
+        axios
+        .get(url)
+        .then((res) => {
+            const {data} = res
+            let dataAsStr = data.toString()
+            let newStringData = dataAsStr += '}' 
+            const newJSONdata = JSON.parse(newStringData)
+            const {slip} = newJSONdata
+            setAdvice(slip.advice)
+        })
     }
 
     return (
@@ -37,11 +59,14 @@ export default function Question() {
             <div>
             <Card className={classes.card}>
             <CardContent className={classes.cardtext}>
-                <h1>Advice from DB</h1>
-                <h1>{advice}</h1>
+                <h2>{advice}</h2>
             </CardContent>
                 <Container className={classes.startbtnContainer}>
-                <Button variant="outlined" size='large' onClick={() => getAdvice()}>Another One</Button>
+                <Button 
+                position='absolute'
+                variant="outlined" 
+                size='large' 
+                onClick={() => getAdvice()}>Another One</Button>
             </Container>
             </Card>
             </div>
@@ -52,7 +77,10 @@ export default function Question() {
                 Click on 'START' above
             </CardContent>
                 <Container className={classes.startbtnContainer}>
-                <Button variant="outlined" size='large' onClick={() => setStarted(true)}>START</Button>
+                <Button 
+                variant="outlined" 
+                size='large' 
+                onClick={() => setStarted(true)}>START</Button>
             </Container>
             </Card>
         }
