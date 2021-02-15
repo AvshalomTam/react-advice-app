@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Card, CardContent, Button, Container} from '@material-ui/core'
-import {makeStyles} from '@material-ui/core/styles';
+import {darken, makeStyles} from '@material-ui/core/styles';
 import axios from 'axios'
 
 const useStyles = makeStyles(
@@ -13,10 +13,16 @@ const useStyles = makeStyles(
             marginTop: '80px'
         },
         cardtext: {
-            textAlign: 'center'
+            textAlign: 'center',
+            color: darken('#DEB887', '1%')
         },
         startbtnContainer: {
-            textAlign: 'center'
+            color: darken('#DEB887', '50%'),
+            textAlign: 'center',
+            position: 'fixed',
+            bottom: '130px',
+            right: '0'
+
         }
     }
 )
@@ -31,6 +37,13 @@ export default function Question() {
         getAdvice()
     }, [])
 
+    // this function converts all html chars inside the questions to normal string
+    function decodeString(str) {
+        const textArea = document.createElement('textarea')
+        textArea.innerHTML = str
+        return textArea.value
+    }
+
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -39,7 +52,6 @@ export default function Question() {
 
     function getAdvice() {
         const adviceNumber = getRandomInt(1, 217).toString()
-        console.log(adviceNumber)
         const url = `https://api.adviceslip.com/advice/${adviceNumber}`
         axios
         .get(url)
@@ -49,7 +61,12 @@ export default function Question() {
             let newStringData = dataAsStr += '}' 
             const newJSONdata = JSON.parse(newStringData)
             const {slip} = newJSONdata
-            setAdvice(slip.advice)
+            let fixedString = decodeString(slip.advice)
+            // fix API Problem
+            if (slip.id === 146) {
+                fixedString = 'Trust Yourself!' 
+            }
+            setAdvice(fixedString)
         })
     }
 
@@ -62,11 +79,11 @@ export default function Question() {
                 <h2>{advice}</h2>
             </CardContent>
                 <Container className={classes.startbtnContainer}>
-                <Button 
-                position='absolute'
+                <Button
                 variant="outlined" 
                 size='large' 
-                onClick={() => getAdvice()}>Another One</Button>
+                onClick={() => getAdvice()}>Another One
+                </Button>
             </Container>
             </Card>
             </div>
