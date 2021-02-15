@@ -62,9 +62,12 @@ export default function Question() {
             const newJSONdata = JSON.parse(newStringData)
             const {slip} = newJSONdata
             let fixedString = decodeString(slip.advice)
-            // fix API Problem
+            // fix API Problems
             if (slip.id === 146) {
                 fixedString = 'Trust Yourself!' 
+            }
+            if (slip.id === 203) {
+                fixedString = 'Listen to your heart' 
             }
             setAdvice(fixedString)
         })
