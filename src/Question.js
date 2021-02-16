@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Card, CardContent, Button, Container} from '@material-ui/core'
+import {Card, CardContent, Button, Container, CardActions} from '@material-ui/core'
 import {darken, makeStyles} from '@material-ui/core/styles';
 import axios from 'axios'
 
@@ -8,7 +8,7 @@ const useStyles = makeStyles(
         card: {
             background: '#F5F5DC',
             width: '75%',
-            height: '220px',
+            height: '250px',
             margin: 'auto',
             marginTop: '80px'
         },
@@ -17,12 +17,9 @@ const useStyles = makeStyles(
             color: darken('#DEB887', '1%')
         },
         btnContainer: {
+            margin: 'auto',
             color: darken('#DEB887', '50%'),
             textAlign: 'center',
-            position: 'fixed',
-            bottom: '130px',
-            right: '0'
-
         }
     }
 )
@@ -80,16 +77,18 @@ export default function Question() {
         return (
             <div>
             <Card className={classes.card}>
+
             <CardContent className={classes.cardtext}>
                 {mainText}
             </CardContent>
-            <Container className={classes.btnContainer}>
-                <Button
-                variant="outlined" 
-                size='large' 
-                onClick={() => buttonClickFunc()}>{buttonText}
-                </Button>
-            </Container>
+            <CardActions>
+                    <Button
+                    className={classes.btnContainer}
+                    variant="outlined" 
+                    size='large' 
+                    onClick={() => buttonClickFunc()}>{buttonText}
+                    </Button>
+            </CardActions>
             </Card>
             </div>
         )
