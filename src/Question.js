@@ -16,7 +16,7 @@ const useStyles = makeStyles(
             textAlign: 'center',
             color: darken('#DEB887', '1%')
         },
-        startbtnContainer: {
+        btnContainer: {
             color: darken('#DEB887', '50%'),
             textAlign: 'center',
             position: 'fixed',
@@ -37,6 +37,9 @@ export default function Question() {
         getAdvice()
     }, [])
 
+    function getStarted() {
+        setStarted(true)
+    }
     // this function converts all html chars inside the questions to normal string
     function decodeString(str) {
         const textArea = document.createElement('textarea')
@@ -73,38 +76,33 @@ export default function Question() {
         })
     }
 
-    return (
-        <div>
-        {started ? 
+    function getView(mainText, buttonText, buttonClickFunc) {
+        return (
             <div>
             <Card className={classes.card}>
             <CardContent className={classes.cardtext}>
-                <h2>{advice}</h2>
+                {mainText}
             </CardContent>
-                <Container className={classes.startbtnContainer}>
+            <Container className={classes.btnContainer}>
                 <Button
                 variant="outlined" 
                 size='large' 
-                onClick={() => getAdvice()}>Another One
+                onClick={() => buttonClickFunc()}>{buttonText}
                 </Button>
             </Container>
             </Card>
             </div>
+        )
+    }
+
+    return (
+        <div>
+        {
+            started ?
+            getView(<h2>{advice}</h2>, 'Another One', getAdvice) 
             : 
-            <Card className={classes.card}>
-            <CardContent className={classes.cardtext}>
-                <h1>Need an Advice?</h1>
-                Click on 'START' above
-            </CardContent>
-                <Container className={classes.startbtnContainer}>
-                <Button 
-                variant="outlined" 
-                size='large' 
-                onClick={() => setStarted(true)}>START</Button>
-            </Container>
-            </Card>
-        }
-        
+            getView(<div><h1>Need an Advice?</h1><p>Click on 'START' above</p></div>, 'START', getStarted)
+        }  
         </div>
     )
 }
